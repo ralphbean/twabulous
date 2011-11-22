@@ -38,6 +38,8 @@ def on_receive(data):
         if not 'user' in obj:
             return
         lnk = obj['user']['profile_image_url']
+        tstamp = ' '.join(obj['created_at'].split(' ')[:4])
+        tstamp = fabulous.color.magenta(tstamp)
         local_file = tempfile.mkstemp()[1]
         urllib.urlretrieve(lnk, local_file)
         print fabulous.image.Image(local_file)
@@ -59,6 +61,7 @@ def on_receive(data):
                 print obj['entities']
                 print fabulous.color.cyan("color failed..."), str(e)
 
+            print tstamp,
             print unicode(obj['text'])
 
     except Exception as e:
