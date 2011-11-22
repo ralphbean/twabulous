@@ -45,6 +45,19 @@ def parse_opts():
     return opts
 
 
+def do_image(obj):
+    """ Download, fabulize, and print a user's profile avatar """
+
+    lnk = obj['user']['profile_image_url']
+    local_file = tempfile.mkstemp()[1]
+    urllib.urlretrieve(lnk, local_file)
+
+    import fabulous.image
+    print fabulous.image.Image(local_file)
+
+    os.remove(local_file)
+
+
 def main():
     """ Main entry point.  This is exposed as the 'twabulous' command """
 
@@ -88,14 +101,7 @@ def main():
                 return
 
             if opts.images:
-                lnk = obj['user']['profile_image_url']
-                local_file = tempfile.mkstemp()[1]
-                urllib.urlretrieve(lnk, local_file)
-
-                import fabulous.image
-                print fabulous.image.Image(local_file)
-
-                os.remove(local_file)
+                do_image(obj)
 
             tstamp = ' '.join(obj['created_at'].split(' ')[:4])
             tstamp = fabulous.color.magenta(tstamp)
