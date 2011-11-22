@@ -14,7 +14,7 @@ f.close()
 
 setup(
     name='twabulous',
-    version='9000.2a',
+    version='9000.4a',
     description="Twitter + Fabulous = Twabulous",
     long_description=long_description,
     author='Ralph Bean & Remy DeCausemaker',
