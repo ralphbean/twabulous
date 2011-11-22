@@ -27,7 +27,7 @@ of_interest = [
         'attr': 'urls',
         'symb': '',
         'color': fabulous.color.yellow,
-        'extract': 'fuxxxx',
+        'extract': 'url',
     },
 ]
 
@@ -35,6 +35,8 @@ def on_receive(data):
     obj = simplejson.loads(data)
 
     try:
+        if not 'user' in obj:
+            return
         lnk = obj['user']['profile_image_url']
         local_file = tempfile.mkstemp()[1]
         urllib.urlretrieve(lnk, local_file)
@@ -48,7 +50,7 @@ def on_receive(data):
 
                     for thing in things:
                         item = lookup['symb'] + thing
-                        toks = obj['text'].split(item)
+                        toks = unicode(obj['text']).split(item)
                         obj['text'] = toks[0] + lookup['color'](item) + toks[1]
 
             except Exception as e:
@@ -57,9 +59,11 @@ def on_receive(data):
                 print obj['entities']
                 print fabulous.color.cyan("color failed..."), str(e)
 
-            print obj['text']
+            print unicode(obj['text'])
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print str(e), ':('
 
 
@@ -70,5 +74,7 @@ PASS = "blahah"
 conn = pycurl.Curl()
 conn.setopt(pycurl.USERPWD, "%s:%s" % (USER, PASS))
 conn.setopt(pycurl.URL, STREAM_URL)
+#FIXME: sometimes it just hangs... lets find out why and fix it someday
+#conn.setopt(pycurl.SOCKET_TIMEOUT, 12)
 conn.setopt(pycurl.WRITEFUNCTION, on_receive)
 conn.perform()
