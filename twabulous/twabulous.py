@@ -29,10 +29,19 @@ def parse_opts():
     parser.add_option(
         '-i', '--with-images',
         dest='images', default=False,
-        action="store_true"
+        action="store_true",
         help='Display twitter avatars?')
 
     opts, args = parser.parse_args()
+
+    if not opts.username:
+        parser.print_help()
+        raise ValueError("You must supply a username")
+
+    if not opts.password:
+        parser.print_help()
+        raise ValueError("You must supply a password")
+
     return opts
 
 
