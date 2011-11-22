@@ -40,7 +40,7 @@ def on_receive(data):
         lnk = obj['user']['profile_image_url']
         local_file = tempfile.mkstemp()[1]
         urllib.urlretrieve(lnk, local_file)
-        #print fabulous.image.Image(local_file)
+        print fabulous.image.Image(local_file)
         os.remove(local_file)
         if 'text' in obj:
             try:
