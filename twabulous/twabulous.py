@@ -12,6 +12,7 @@ import urllib
 import os
 import re
 import optparse
+import time
 
 
 def parse_opts():
@@ -132,8 +133,21 @@ def main():
                     print obj['entities']
                     print fabulous.color.cyan("color failed..."), str(e)
 
-                # The main print statement
-                print tstamp, unicode(obj['text'])
+                # Use this shit like:
+                #   $ twabulous | gource --log-format custom -
+                for tag in obj['entities']['hashtags']:
+                    print "%i|%s|A|hashtags/%s|FF0000" % (
+                        time.time(),
+                        obj['user']['screen_name'],
+                        tag['text'],
+                    )
+
+                for mention in obj['entities']['user_mentions']:
+                    print "%i|%s|A|mentions/%s|00FF00" % (
+                        time.time(),
+                        obj['user']['screen_name'],
+                        mention['screen_name'],
+                    )
 
         except Exception as e:
             # TODO -- remove these traceback prints for cleanliness
